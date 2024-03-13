@@ -30,6 +30,21 @@ const createWindow = () => {
     // mainWindow.webContents.openDevTools();
 };
 
+// Create about window
+function createAboutWindow() {
+    const aboutWindow = new BrowserWindow({
+        title: "About Image Resizer",
+        width: 300,
+        height: 300,
+        webPreferences: {
+            preload: path.join(__dirname, "preload.js"),
+        },
+    });
+
+    // and load the index.html of the app.
+    aboutWindow.loadFile(path.join(__dirname, "./renderer/about.html"));
+}
+
 // This method will be called when Electron has finished
 // App is ready
 app.whenReady().then(() => {
@@ -50,10 +65,28 @@ app.whenReady().then(() => {
 
 // Menu Template
 const menu = [
+    // Mac
+    ...(isMac
+        ? [
+              {
+                  label: app.name,
+                  submenu: [{ label: "About", click: createAboutWindow }],
+              },
+          ]
+        : []),
     {
-        label: "File",
-        submenu: [{ label: "Quit", click: () => app.quit(), accelerator: "CmdOrCtrl+W" }],
+        role: "fileMenu",
+
+        //  Window
     },
+    ...(!isMac
+        ? [
+              {
+                  label: "Help",
+                  submenu: [{ label: "About", click: createAboutWindow }],
+              },
+          ]
+        : []),
 ];
 
 // Quit when all windows are closed, except on macOS. There, it's common
