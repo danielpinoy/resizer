@@ -15,6 +15,8 @@ const createWindow = () => {
         width: isDev ? 1000 : 800,
         height: 600,
         webPreferences: {
+            contextIsolation: true,
+            nodeIntegration: true,
             preload: path.join(__dirname, "preload.js"),
         },
     });
@@ -55,8 +57,6 @@ app.whenReady().then(() => {
     Menu.setApplicationMenu(mainMenu);
 
     app.on("activate", () => {
-        // On OS X it's common to re-create a window in the app when the
-        // dock icon is clicked and there are no other windows open.
         if (BrowserWindow.getAllWindows().length === 0) {
             createWindow();
         }
@@ -70,7 +70,7 @@ const menu = [
         ? [
               {
                   label: app.name,
-                  submenu: [{ label: "About", click: createAboutWindow }],
+                  submenu: [{ label: "About", click: createAboutWindow }, ,],
               },
           ]
         : []),
@@ -83,7 +83,7 @@ const menu = [
         ? [
               {
                   label: "Help",
-                  submenu: [{ label: "About", click: createAboutWindow }],
+                  submenu: [{ label: "About", click: createAboutWindow }, ,],
               },
           ]
         : []),
